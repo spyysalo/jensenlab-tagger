@@ -13,7 +13,7 @@ clean:
 #
 tagger_swig.py tagger_swig_wrap.cxx: tagger_swig.i tagger.h
 	swig -python -c++ -threads $<
-	
+
 tagger.o: tagger.cxx acronyms.h tagger.h tagger_types.h tagger_core.h acronyms.h hash.h tokens.h
 	$(CC) $(CFLAGS) -c $<
 
@@ -38,10 +38,10 @@ libtagger.a: tagger.o
 	ar -rfs -o $@ $<
 
 tagcorpus: tagcorpus.cxx acronyms.h document.h file.h hash.h mutex.h thread.h match_handlers.h base_handlers.h meta_handlers.h print_handlers.h score_handlers.h segment_handlers.h batch_tagger.h threaded_batch_tagger.h tagger.h tagger_core.h tagger_types.h tightvector.h tokens.h
-	$(CC) $(CFLAGS) -lboost_regex -pthread -o $@ $< -lm
+	$(CC) $(CFLAGS) -pthread -o $@ $< -lm -lboost_regex
 
 cleandict: cleandict.cxx acronyms.h file.h hash.h tagger.h tagger_core.h tagger_types.h
-	$(CC) $(CFLAGS) -lboost_regex -pthread -o $@ $< -lm
+	$(CC) $(CFLAGS) -pthread -o $@ $< -lm -lboost_regex
 
 %: %.cxx acronyms.h document.h file.h hash.h mutex.h match_handlers.h base_handlers.h batch_tagger.h tagger.h tagger_core.h tagger_types.h tightvector.h tokens.h
-	$(CC) $(CFLAGS) -lboost_regex -pthread -o $@ $< -lm
+	$(CC) $(CFLAGS) -pthread -o $@ $< -lm -lboost_regex
