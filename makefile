@@ -25,14 +25,14 @@ tagger_swig_wrap.o: tagger_swig_wrap.cxx tagger.h tagger_types.h tagger_core.h a
 # the Shared Object: _tagger_swig.so.
 #
 _tagger_swig.so: tagger_swig_wrap.o
-	$(CC) $(LFLAGS) -o $@ $<
+	$(CC) -o $@ $< $(LFLAGS)
 
 #
 # Link to make the C/C++ stand-alone Shared Object for
 # inclusing the C/C++ tagger in other C++ programs.
 #
 libtagger.so: tagger.o
-	$(CC) $(LFLAGS) -o $@ $<
+	$(CC) -o $@ $< $(LFLAGS)
 
 libtagger.a: tagger.o
 	ar -rfs -o $@ $<
