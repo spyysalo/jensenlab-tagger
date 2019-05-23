@@ -205,6 +205,25 @@ bool Tagger::is_blocked(const char* document_id, const char* name)
 	}
 }
 
+bool Tagger::is_blocked_type(const char* document_id, const char* name, int type)
+{
+	/* TODO: consider adding type-specific version of local black/whitelist */
+	NAME_TYPE_BOOL::iterator global_type_hit = this->global_type.find(name);
+	if (global_type_hit != this->global_type.end()) {
+		INT_BOOL::iterator type_hit = global_type_hit->second.find(type);
+		if (type_hit != global_type_hit->second.end()) {
+			return type_hit->second;
+		}
+		else if (type > 0) {
+			type_hit = global_type_hit->second.find(0);
+			if (type_hit != global_type_hit->second.end()) {
+				return type_hit->second;
+			}
+		}
+	}
+	return false;
+}
+
 Entities Tagger::resolve_name(const char* name) {
 	DICTIONARY::iterator search = this->names.find(name);
 	Entities entities;
@@ -233,7 +252,15 @@ void Tagger::load_global(const char* global_filename)
 		if (size >= 2) {
 			const char* name = fields[0];
 			bool blocked = (fields[1][0] == '1' || fields[1][0] == 't' || fields[1][0] == 'y');
-			this->global[name] = blocked;
+			if (size >= 3) {
+				int type_int;
+				type_int = atoi(fields[2]);
+				this->global_type[name][type_int] = blocked;
+				delete fields[2];
+			}
+			else {
+				this->global[name] = blocked;
+			}
 			DICTIONARY::iterator search = this->names.find(name);
 			if (search == this->names.end()) {
 				Identifier id;
@@ -577,6 +604,9 @@ void Tagger::find_matches(Matches& matches, Acronyms& acronyms, Tokens& tokens, 
 						ENTITY_VECTOR  entity_subset;
 						for (ENTITY_VECTOR::iterator et = entities.begin(); et != entities.end(); ++et) {
 							Entity& entity = *et;
+							if (this->is_blocked_type(document_id, name, entity.type)) {
+								continue;
+							}
 							if (entity_types.empty() || (entity.type >= 0 && entity_types.find(0) != entity_types.end()) || entity_types.find(entity.type) != entity_types.end()) {
 								entity_subset.push_back(entity);
 							}

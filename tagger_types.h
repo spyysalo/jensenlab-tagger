@@ -70,4 +70,7 @@ typedef unordered_map<const char*, ENTITY_VECTOR, OrthographHash, OrthographHash
 typedef unordered_map<const char*, bool,      StringHash, StringHash::EqualString>  NAME_BOOL;
 typedef unordered_map<const char*, NAME_BOOL, StringHash, StringHash::EqualString>  DOC_NAME_BOOL;
 
+typedef unordered_map<int, bool> INT_BOOL;
+typedef unordered_map<const char *, INT_BOOL, StringHash, StringHash::EqualString> NAME_TYPE_BOOL;
+
 #endif

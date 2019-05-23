@@ -1,9 +1,11 @@
 CC     = g++
 CFLAGS = -fpic -Wall -O3 -std=c++11
 LFLAGS = -fpic -shared -lboost_regex
-PYTHON = -I/usr/include/python2.7 -I/usr/include/python
+PYTHON = -I/usr/include/python2.7 -I/usr/include/python -I/usr/local/Frameworks/Python.framework/Headers/
 
-all: tagger_swig.py _tagger_swig.so libtagger.so libtagger.a tagcorpus cleandict environments organisms species
+all: tagger_swig.py _tagger_swig.so libtagger.so tagcorpus cleandict environments organisms species
+
+# all: tagger_swig.py _tagger_swig.so libtagger.so libtagger.a tagcorpus cleandict environments organisms species
 
 clean:
 	rm -f tagger_swig.py tagcorpus cleandict environments organisms species spring *.pyc *_wrap.cxx *.o *.a *.so
@@ -25,7 +27,7 @@ tagger_swig_wrap.o: tagger_swig_wrap.cxx tagger.h tagger_types.h tagger_core.h a
 # the Shared Object: _tagger_swig.so.
 #
 _tagger_swig.so: tagger_swig_wrap.o
-	$(CC) -o $@ $< $(LFLAGS)
+	$(CC) -o $@ $< $(LFLAGS) -lpython
 
 #
 # Link to make the C/C++ stand-alone Shared Object for

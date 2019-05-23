@@ -40,6 +40,7 @@ class Tagger
 		DICTIONARY    names;
 		NAME_BOOL     global;
 		DOC_NAME_BOOL local;
+		NAME_TYPE_BOOL global_type;
 		
 	protected:
 		boost::regex re_stop;
@@ -56,6 +57,7 @@ class Tagger
 		void allow_block_name(const char* name, const char* document_id, bool block);
 		bool check_name(const char* name, int type, const char* identifier);
 		bool is_blocked(const char* document_id, const char* name);
+		bool is_blocked_type(const char* document_id, const char* name, int type);
 		Entities resolve_name(const char* name);
 		
 	public:
